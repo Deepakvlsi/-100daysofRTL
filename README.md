@@ -13,15 +13,15 @@ Day-7 --> Decoder 3 to 8
 Day-8 --> JK Flip Flop
 Day-9 --> Comparator using mux
 Day-10 --> PISO Shift register
-Day-11 -->
-Day-12 -->
-Day-13 -->
-Day-14 -->
-Day-15 -->
-Day-16 -->
-Day-17 -->
-Day-18 -->
-Day-19 -->
+Day-11 --> SISO Shift register 
+Day-12 --> D-flip flop with asynchronous register 
+Day-13 --> Pseudo-bit random sequence
+Day-14 --> Restoring division algorithm
+Day-15 --> BCD Adder
+Day-16 --> Adder Substractor
+Day-17 --> Carry select adder
+Day-18 --> BCD to Seven segment
+Day-19 --> Priority Encoder
 Day-20 -->
 Day-21 -->
 Day-22 -->
