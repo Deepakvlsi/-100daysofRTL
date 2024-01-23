@@ -45,7 +45,7 @@ Day-39 --> Clock divide by 3
 Day-40 --> Clock divide by 1.5
 Day-41 --> Square Generator
 Day-42 --> Cube Generator
-Day-43 --> Adder Cum Substractor
+Day-43 --> Adder Cum Subtractor
 Day-44 --> Digital Clock 
 Day-45 --> Barrel Shifter 
 Day-46 --> LIFO
