@@ -1,0 +1,99 @@
+module apb_master (
+    input wire PCLK,            // APB Clock
+    input wire PRESETn,         // Active low reset
+    input wire [31:0] PADDR,    // Address bus
+    input wire PWRITE,          // Write enable signal
+    input wire PENABLE,         // Enable signal
+    input wire [31:0] PWDATA,   // Data to be written (write data)
+    input wire PSEL,            // Peripheral select signal
+    output reg [31:0] PRDATA,   // Data read from the slave (read data)
+    output reg PREADY,          // Ready signal from slave
+    output reg PSLVERR,         // Slave error response
+    inout wire [31:0] PDATA     // Shared data bus (read/write)
+);
+
+// Internal states
+typedef enum logic [1:0] {
+    IDLE  = 2'b00,
+    SETUP = 2'b01,
+    ACCESS = 2'b10
+} apb_state;
+
+reg [1:0] current_state, next_state;
+reg [31:0] data_buffer;
+
+// APB Master FSM (Finite State Machine)
+always @(posedge PCLK or negedge PRESETn) begin
+    if (!PRESETn)
+        current_state <= IDLE;     // Reset state
+    else
+        current_state <= next_state; // Transition to the next state
+end
+
+// State transition logic
+always @(*) begin
+    case (current_state)
+        IDLE: begin
+            if (PSEL)
+                next_state = SETUP;
+            else
+                next_state = IDLE;
+        end
+
+        SETUP: begin
+            if (PENABLE)
+                next_state = ACCESS;
+            else
+                next_state = SETUP;
+        end
+
+        ACCESS: begin
+            if (!PSEL)
+                next_state = IDLE;
+            else
+                next_state = ACCESS;
+        end
+
+        default: next_state = IDLE;
+    endcase
+end
+
+// APB protocol implementation
+always @(posedge PCLK or negedge PRESETn) begin
+    if (!PRESETn) begin
+        PRDATA  <= 32'b0;
+        PREADY  <= 1'b0;
+        PSLVERR <= 1'b0;
+    end else begin
+        case (current_state)
+            IDLE: begin
+                PREADY <= 1'b0;       // No transaction in IDLE state
+            end
+
+            SETUP: begin
+                PREADY <= 1'b0;       // Not ready in SETUP state
+            end
+
+            ACCESS: begin
+                if (PWRITE) begin
+                    // Write operation
+                    PREADY <= 1'b1;   // Indicate that master is ready
+                    data_buffer <= PWDATA;
+                    PSLVERR <= 1'b0;  // Assuming no error
+                end else begin
+                    // Read operation
+                    PREADY <= 1'b1;
+                    PRDATA <= PDATA;  // Read data from slave
+                    PSLVERR <= 1'b0;  // Assuming no error
+                end
+            end
+
+            default: begin
+                PREADY <= 1'b0;
+                PSLVERR <= 1'b0;
+            end
+        endcase
+    end
+end
+
+endmodule
