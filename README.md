@@ -53,5 +53,5 @@ Day-47 --> Fixed Priority Arbiter
 Day-48 --> Round Robin Arbiter  
 Day-49 --> Vedic Multiplier   
 Day-50 --> Traffic Light Controller 
-Day-51 --> Kogge Stone Adder
+Day-51 --> Kogge Stone Adder  
 Day-52 --> APB Master
